@@ -17,4 +17,8 @@ public interface CommentService {
 
 	CommentDto addComment(@Valid CreateCommentRequest request);
 
+	void approveComment(Long id);
+
+	void deleteComment(Long id);
+
 }

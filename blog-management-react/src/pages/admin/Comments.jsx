@@ -63,7 +63,7 @@ const Comments = () => {
     }
   };
 
-  console.log(comments);
+  // console.log(comments);
 
   useEffect(() => {
     fetchComments();

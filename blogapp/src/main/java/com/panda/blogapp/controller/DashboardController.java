@@ -40,8 +40,8 @@ public class DashboardController {
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        long blogs = blogRepo.findByUser(user).size();
-        long comments = commentRepo.findByName(user.getUsername()).size();
+        long blogs = blogRepo.countByUserAndPublishedTrue(user);
+        long comments = commentRepo.countByBlogUser(user);
         long drafts = blogRepo.countByPublishedFalse();
         Pageable pageable = PageRequest.of(0, 5);
         List<Blog> recent = blogRepo.findTop5ByUserOrderByCreatedAtDesc(user,pageable);

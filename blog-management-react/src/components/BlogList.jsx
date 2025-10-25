@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { blog_data, blogCategories } from '../assets/assets'
 // eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react"
@@ -6,21 +6,32 @@ import BlogCard from './BlogCard'
 import { useAppContext } from '../context/AppContext'
 
 const BlogList = () => {
-
+    const [blogs, setBlogs] = useState([])
     const [menu, setMenu] = useState("All")
-    const {blogs, input} = useAppContext()
+    const {axios, input} = useAppContext();
 
     // console.log("blogs ",blogs)
     // console.log("input ",input)
 
+    const fetchPublishedBlogs = async () => {
+      const {data} = await axios.get('/api/blogs/all');
+      // console.log(data);
+      
+      setBlogs(data)
+    }
 
     const filteredBlogs = () => {
       if(input === '') {
         return blogs
       }
-      console.log("input ",input)
+      // console.log("input ",input)
       return blogs.filter((blog) => blog.title.toLowerCase().includes(input.toLowerCase()) || blog.category.toLowerCase().includes(input.toLowerCase()))
     }
+
+    useEffect(() => {
+      fetchPublishedBlogs();
+    }, [])
+    
 
   return (
     <div>

@@ -18,6 +18,10 @@ public interface BlogRepository extends JpaRepository<Blog, Long>{
 
 	List<Blog> findByUser(User user);
 	
+	long countByUserAndPublishedTrue(User user);
+	
+	List<Blog> findAllByPublishedTrue();
+	
 	@Query("SELECT b FROM Blog b JOIN FETCH b.user")
 	List<Blog> findAllWithUser();
 

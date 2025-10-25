@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.panda.blogapp.dto.CommentDto;
 import com.panda.blogapp.dto.CreateCommentRequest;
+import com.panda.blogapp.entity.Comment;
 import com.panda.blogapp.mapper.CommentMapper;
 import com.panda.blogapp.repository.CommentRepository;
 import com.panda.blogapp.service.CommentService;
@@ -16,8 +17,8 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CommentServiceImpl implements CommentService{
-	
+public class CommentServiceImpl implements CommentService {
+
 	private final CommentRepository commentRepository;
 	private final CommentMapper mapper;
 
@@ -41,5 +42,19 @@ public class CommentServiceImpl implements CommentService{
 	public List<CommentDto> getCommentsByBlog(Long blogId) {
 		return mapper.toDtoList(commentRepository.findCommentsByBlogId(blogId));
 	}
-	
+
+	@Override
+	public void approveComment(Long id) {
+		Comment comment = commentRepository.findById(id).orElseThrow(() -> new RuntimeException("Comment not found"));
+		comment.setApproved(true);
+		commentRepository.save(comment);
+	}
+
+	@Override
+	public void deleteComment(Long id) {
+		commentRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Comment not found"));
+		commentRepository.deleteById(id);
+	}
+
 }

@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 public class CreateCommentRequest {
-
-    @NotBlank
-    private String name;
+	
+	@NotNull
+	private String name;
 
     @NotBlank
     private String content;

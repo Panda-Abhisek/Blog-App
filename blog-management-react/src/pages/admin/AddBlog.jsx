@@ -3,6 +3,7 @@ import { assets, blogCategories } from "../../assets/assets";
 import Quill from "quill";
 import { option } from "motion/react-client";
 import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 const AddBlog = () => {
   const editorRef = useRef(null);
@@ -25,14 +26,14 @@ const AddBlog = () => {
     });
   };
 
-  console.log(published);
+  // console.log(published);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
 
     const description = quillRef.current.root.innerHTML;
     const currentPublished = published;
-    console.log(published);
+    // console.log(published);
     const currentCategory = category;
 
     const base64Image = image ? await fileToBase64(image) : "";
@@ -45,10 +46,11 @@ const AddBlog = () => {
       category: currentCategory,
       published: currentPublished, // this now stays in sync perfectly
     };
-  console.log(obj);
+    // console.log(obj);
     try {
       const res = await axios.post(`/api/blogs`, obj);
-      console.log("Blog added:", res.data);
+      // console.log("Blog added:", res.data);
+      toast.success("Blog Added");
 
       // Reset all fields after success
       setImage(false);
@@ -58,7 +60,8 @@ const AddBlog = () => {
       setPublished(false);
       quillRef.current.root.innerHTML = "";
     } catch (err) {
-      console.error("Error:", err);
+      // console.error("Error:", err);
+      toast.error("Error: ", err);
     }
   };
 

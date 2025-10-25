@@ -18,7 +18,7 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       const res = await axios.get("/api/dashboard");
-      console.log(res);
+      // console.log(res);
       // console.log(typeof res.data);
       const data = typeof res.data === "string" ? JSON.parse(res.data) : res.data;
       // console.log("Parsed Response:", data);
@@ -35,7 +35,7 @@ const Dashboard = () => {
     }
   };
 
-  // console.log(dashboardData);
+  console.log(dashboardData);
 
   useEffect(() => {
     fetchDashboardData();

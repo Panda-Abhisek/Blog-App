@@ -2,6 +2,7 @@ package com.panda.blogapp.service.impl;
 
 import java.util.List;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,8 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class BlogServiceImpl implements BlogService{
-	
+public class BlogServiceImpl implements BlogService {
+
 	private final BlogRepository blogRepository;
 	private final BlogMapper mapper;
 	private final UserRepository userRepository;
@@ -42,29 +43,53 @@ public class BlogServiceImpl implements BlogService{
 	@Override
 	public BlogDto createBlog(@Valid @RequestBody CreateBlogRequest request) {
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		User user = userRepository.findByUsername(username)
-		           .orElseThrow(() -> new RuntimeException("User not found"));
-		
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+
 		Blog entity = mapper.toEntity(request);
 		entity.setUser(user);
-		
+
 		return mapper.toDto(blogRepository.save(entity));
 	}
-	
+
 	@Override
 	public List<BlogDto> getBlogsForCurrentUser() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+		User user = userRepository.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        List<Blog> blogs = blogRepository.findByUser(user);
-        return mapper.toDtoList(blogs);
-    }
-	
+		List<Blog> blogs = blogRepository.findByUser(user);
+		return mapper.toDtoList(blogs);
+	}
+
 	@Override
 	@Transactional(readOnly = true)
-    public List<Blog> getBlogsByUser(User user) {
-        return blogRepository.findByUserWithUserFetched(user);
-    }
+	public List<Blog> getBlogsByUser(User user) {
+		return blogRepository.findByUserWithUserFetched(user);
+	}
+
+	@Override
+	public BlogDto togglePublish(Long id, BlogDto blogDto) {
+		Blog blog = blogRepository.findById(id).orElseThrow(() -> new RuntimeException("Blog not found"));
+		blog.setPublished(blogDto.isPublished());
+		blogRepository.save(blog);
+		return mapper.toDto(blog);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<BlogDto> getAllPublishedBlogs() {
+		return mapper.toDtoList(blogRepository.findAllByPublishedTrue());
+	}
+
+	@Override
+	public void deleteBlog(Long id) {
+		Blog blog = blogRepository.findById(id).orElseThrow(() -> new RuntimeException("Blog not found"));
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		if (!blog.getUser().getUsername().equals(username)) {
+		    throw new AccessDeniedException("You can only delete your own blogs");
+		}
+		blogRepository.delete(blog);
+	}
+
 }

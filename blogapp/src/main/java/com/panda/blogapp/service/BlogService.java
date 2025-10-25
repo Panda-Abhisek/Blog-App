@@ -21,4 +21,10 @@ public interface BlogService {
 
 	List<Blog> getBlogsByUser(User user);
 
+	BlogDto togglePublish(Long id, BlogDto blogDto);
+
+	List<BlogDto> getAllPublishedBlogs();
+
+	void deleteBlog(Long id);
+
 }
