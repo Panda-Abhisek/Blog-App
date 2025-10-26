@@ -35,6 +35,9 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+            	System.out.println("Authenticated user: " +
+            		    SecurityContextHolder.getContext().getAuthentication());
+
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -57,7 +60,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private String parseJwt(HttpServletRequest request) {
-        String jwt = jwtUtils.getJwtFromHeader(request);
+        String jwt = jwtUtils.resolveToken(request);
         logger.debug("AuthTokenFilter.java: {}", jwt);
         return jwt;
     }

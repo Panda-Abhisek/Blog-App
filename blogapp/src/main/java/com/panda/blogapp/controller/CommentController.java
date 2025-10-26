@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,8 +54,11 @@ public class CommentController {
 
 	// Post a new comment under a blog
 	@PostMapping
+	@Transactional
 	public ResponseEntity<CommentDto> addComment(@Valid @RequestBody CreateCommentRequest request) {
+		System.out.println("Entered add Comment endpoint");
 		String user = SecurityContextHolder.getContext().getAuthentication().getName();
+		System.out.println("Username: " + user);
 		userRepository.findByUsername(user).orElseThrow(() -> new RuntimeException("User not found"));
 		
 		Blog blog = blogRepository.findById(request.getBlogId())

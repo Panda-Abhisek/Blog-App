@@ -3,37 +3,14 @@ import React, { useEffect, useState } from "react";
 import { comments_data } from "../../assets/assets";
 import CommentTableItem from "../../components/admin/CommentTableItem";
 import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 const Comments = () => {
   const [comments, setComments] = useState([]);
   const [filter, setFilter] = useState("Not Approved");
   const { axios, user } = useAppContext();
   const [blogs, setBlogs] = useState([]);
-
-  // const fetchComments = async () => {
-  //   try {
-  //     const userId = user?.id; // however you're storing it
-  //     const response = await axios.get(`/api/dashboard/listblog`, {
-  //       params: { userId: userId },
-  //     });
-
-  //     const blogsData = response.data;
-  //     console.log(blogsData);
-  //     setBlogs(blogsData);
-
-  //     if (blogsData.length > 0) {
-  //       const commentResponse = await axios.get(
-  //         `/api/comments/blog/${blogsData[0].id}`
-  //       );
-  //       console.log(commentResponse);
-
-  //       setComments(commentResponse.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
+  
   const fetchComments = async () => {
     try {
       const userId = user?.id;
@@ -59,7 +36,8 @@ const Comments = () => {
 
       setComments(allComments);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      // console.error("Error fetching data:", error);
+      toast.error("Error fetching data:", error);
     }
   };
 

@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 
 const BlogTableItem = ({ blog, fetchBlogs, index }) => {
   // console.log(blog);
-  const { axios, token } = useAppContext();
+  const { axios } = useAppContext();
   const { title, createdAt, published, id } = blog;
   // console.log(published);
   const BlogDate = new Date(createdAt);
@@ -16,10 +16,7 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
     try {
       await axios.put(
         `/api/blogs/${id}/publish`,
-        { published: !published },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { published: !published }
       );
       await fetchBlogs(); // refresh table data
     } catch (error) {
@@ -29,9 +26,7 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
 
   const deleteBlog = async () => {
     try {
-      await axios.delete(`/api/blogs/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(`/api/blogs/${id}`);
       await fetchBlogs(); // refresh the list
     } catch (error) {
       toast.error("Failed to delete blog:", error);

@@ -19,6 +19,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Component
@@ -31,6 +32,23 @@ public class JwtUtil {
     @Value("${spring.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
+    public String resolveToken(HttpServletRequest request) {
+        // First, check Authorization header
+        String token = getJwtFromHeader(request);
+        if (token != null) return token;
+        // Then check HttpOnly cookie
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("jwt".equals(cookie.getName())) {
+                	System.out.println("jwt from cookies " + cookie.getValue());
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        return null;
+    }
+    
     public String getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         logger.debug("Authorization Header: {}", bearerToken);
@@ -48,6 +66,23 @@ public class JwtUtil {
                 .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+    
+    public String getUsernameFromRequest(HttpServletRequest request) {
+        if (request.getCookies() == null) return null;
+
+        for (Cookie cookie : request.getCookies()) {
+            if ("jwt".equals(cookie.getName())) {
+                try {
+                    String token = cookie.getValue();
+                    return getUserNameFromJwtToken(token);
+                } catch (Exception e) {
+                    System.out.println("Invalid JWT in cookie: " + e.getMessage());
+                    return null;
+                }
+            }
+        }
+        return null;
     }
 
     public String getUserNameFromJwtToken(String token) {
@@ -70,6 +105,7 @@ public class JwtUtil {
                     .verifyWith((SecretKey) key())
                     .build()
                     .parseSignedClaims(authToken);
+            System.out.println("Validated!!!");
             return true;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());

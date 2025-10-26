@@ -11,6 +11,7 @@ import Footer from "../components/Footer";
 import Loader from "../components/Loader";
 import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
+import axios from '../context/axiosInstance'
 
 const Blog = () => {
   const { id } = useParams();
@@ -21,26 +22,19 @@ const Blog = () => {
   const [content, setContent] = useState("");
   const [blogId, setBlogId] = useState("");
 
-  const { blogs, axios } = useAppContext();
+  const { blogs, user } = useAppContext();
 
   const fetchBlogData = async () => {
-    // console.log(blogs);
-
     const data = blogs.find((item) => item.id == id);
-    // console.log("blog data",data);
     setData(data);
     setBlogId(data.id);
   };
 
   const fetchComments = async () => {
     const data = blogs.find((item) => item.id == id);
-    // console.log(data.id)
     const commentsData = await axios.get(`/api/comments/blog`, {
       params: { blogId: data.id },
     });
-    // setComments(comments_data)
-    // console.log(commentsData)
-    // console.log("comments data",commentsData.data)
     setComments(commentsData.data);
   };
 
@@ -57,16 +51,22 @@ const Blog = () => {
       blogId,
     };
 
-    try {
-      const res = await axios.post("/api/comments", obj);
-      toast.success("Comment added successfully");
+    if (user != null) {
+      try {
+        const res = await axios.post("/api/comments", obj, { withCredentials: true });
+        console.log(res);
+        toast.success("Comment added successfully");
 
-      setName("");
-      setContent("");
+        setName("");
+        setContent("");
 
-      await fetchComments();
-    } catch (error) {
-      toast.error(error.message);
+        await fetchComments();
+      } catch (error) {
+        // console.log(error);
+        toast.error(error.message);
+      }
+    } else {
+      toast.error("You are not logged in!")
     }
   };
 

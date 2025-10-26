@@ -15,10 +15,10 @@ const ListBlog = () => {
         params: { userId: userId }
       });
 
-      console.log(response.data);
+      // console.log(response.data);
       setBlogs(response.data); // update your state if you have one
     } catch (error) {
-      console.error("Error fetching blogs:", error);
+      toast.error("Error fetching blogs:", error);
     }
   };
 

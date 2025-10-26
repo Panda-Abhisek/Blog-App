@@ -1,22 +1,37 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
+import axios from "./axiosInstance";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  const [token, setToken] = useState(null);
   const [blogs, setBlogs] = useState([]);
   const [input, setInput] = useState("");
   const [user, setUser] = useState(null);
 
-  console.log(user);
-  
+  // Fetch logged-in user (the cookie is sent automatically)
+  const fetchCurrentUser = async () => {
+    try {
+      const { data } = await axios.get("/api/auth/me", { withCredentials: true });
+      setUser(data);
+    } catch {
+      setUser(null);
+    }
+  };
+
+  // const fetchCsrfToken = async () => {
+  //   try {
+  //     await axios.get("/api/auth/csrf-token", { withCredentials: true });
+  //     // The cookie XSRF-TOKEN is now set in the browser
+  //   } catch (error) {
+  //     console.error("Failed to fetch CSRF token", error);
+  //   }
+  // };
+
+  // console.log(user);
 
   const fetchBlogs = async () => {
     try {
@@ -29,34 +44,32 @@ export const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    // fetchCsrfToken()
+    fetchCurrentUser();
     fetchBlogs();
-    const token = localStorage.getItem("token");
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    console.log(token);
-    console.log(storedUser);
-    if (token) {
-      setToken(token);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common["Authorization"];
-    }
+  }, []);
 
-    if (storedUser) {
-      setUser(storedUser);
+  const logout = async () => {
+    try {
+      await axios.post("/api/auth/logout");
+      setUser(null);
+      toast.success("Logged out successfully");
+      navigate("/");
+    } catch {
+      toast.error("Logout failed");
     }
-  }, [token]);
+  };
 
   const value = {
     axios,
     navigate,
-    token,
-    setToken,
     blogs,
     setBlogs,
     input,
     setInput,
     user,
     setUser,
+    logout,
   };
   // console.log(blogs);
 

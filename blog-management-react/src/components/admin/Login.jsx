@@ -4,46 +4,50 @@ import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 
 const Login = () => {
-  const { axios, setToken, navigate, token, setUser } = useAppContext();
+  const { axios, navigate, setUser } = useAppContext();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const fetchCsrfToken = async () => {
+    try {
+      await axios.get("/api/auth/csrf-token", { withCredentials: true });
+      // The cookie XSRF-TOKEN is now set in the browser
+    } catch (error) {
+      console.error("Failed to fetch CSRF token", error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(username, password);
     try {
-      const { data } = await axios.post("/api/auth/login", {
-        username,
-        password,
-      });
-      console.log(data);
-
-      if (data && data.jwt && data.user) {
-        setToken(data.jwt);
-        localStorage.setItem("token", data.jwt);
-        axios.defaults.headers.common["Authorization"] = `Bearer ${data.jwt}`;
-
+      const { data } = await axios.post(
+        "/api/auth/login",
+        {
+          username,
+          password,
+        },
+        { withCredentials: true }
+      );
+      // console.log(data);
+      if (data) {
         // set user
-        setUser(data.user);
-        console.log(data.user);
-        console.log(JSON.stringify(data.user));
-        
-        localStorage.setItem("user", JSON.stringify(data.user));
-
+        setUser(data);
+        // console.log(data);
+        // console.log(JSON.stringify(data));
+        await fetchCsrfToken(); // <-- fetch CSRF cookie now
+        // await fetchCurrentUser(); // optional: get logged-in user
         toast.success("Login successful!");
+        navigate("/admin");
       } else {
-        toast.error(data.message);
+        toast.error("Login Failed!");
       }
     } catch (error) {
       toast.error(error.message);
     }
   };
 
-  useEffect(() => {
-    if (token) {
-      navigate("/admin");
-    }
-  }, [token, navigate]);
+  useEffect(() => {}, []);
 
   return (
     <div className="flex items-center justify-center h-screen">

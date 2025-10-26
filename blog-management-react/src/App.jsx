@@ -15,8 +15,8 @@ import { useAppContext } from './context/AppContext'
 
 const App = () => {
 
-  const {token} = useAppContext()
-  console.log(token)
+  const {user} = useAppContext()
+  // console.log(user);
 
   return (
     <div>
@@ -24,7 +24,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Home/>} />
         <Route path='/blogs/:id' element={<Blog/>} />
-        <Route path='/admin' element={token ? <Layout /> : <Login />}>
+        <Route path='/admin' element={user ? <Layout /> : <Login />}>
           <Route index element={<Dashboard/>}/>
           <Route path='addBlog' element={<AddBlog/>}/>
           <Route path='listBlog' element={<ListBlog/>}/>

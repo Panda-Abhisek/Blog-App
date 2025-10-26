@@ -37,7 +37,6 @@ public class DashboardController {
     @Transactional(readOnly = true)
     public DashboardDto getDashboard() {
     	String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         long blogs = blogRepo.countByUserAndPublishedTrue(user);

@@ -69,6 +69,7 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
+	@Transactional
 	public BlogDto togglePublish(Long id, BlogDto blogDto) {
 		Blog blog = blogRepository.findById(id).orElseThrow(() -> new RuntimeException("Blog not found"));
 		blog.setPublished(blogDto.isPublished());

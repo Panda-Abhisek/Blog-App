@@ -1,6 +1,7 @@
 import React from "react";
 import { assets } from "../../assets/assets";
 import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 const CommentTableItem = ({ comment, fetchComments }) => {
   const { axios, token } = useAppContext();
@@ -11,25 +12,22 @@ const CommentTableItem = ({ comment, fetchComments }) => {
     try {
       await axios.put(
         `/api/comments/${id}/approve`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        {}
       );
       await fetchComments(); // refresh the table
     } catch (error) {
-      console.error("Error approving comment:", error);
+      // console.error("Error approving comment:", error);
+      toast.error("Error approving comment:", error);
     }
   };
 
   const deleteComment = async () => {
     try {
-      await axios.delete(`/api/comments/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(`/api/comments/${id}`);
       await fetchComments(); // refresh after deletion
     } catch (error) {
-      console.error("Error deleting comment:", error);
+      // console.error("Error deleting comment:", error);
+      toast.error("Error deleting comment:", error);
     }
   };
 

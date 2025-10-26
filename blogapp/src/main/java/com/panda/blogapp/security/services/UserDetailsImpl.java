@@ -3,8 +3,10 @@ package com.panda.blogapp.security.services;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.panda.blogapp.entity.User;
@@ -30,10 +32,12 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user) {
+    	List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    	
         return new UserDetailsImpl(
                 user.getUsername(),
                 user.getPassword(),
-                Collections.emptyList()
+                authorities
         );
     }
 

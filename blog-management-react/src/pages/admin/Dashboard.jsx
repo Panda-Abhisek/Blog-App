@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import { assets, dashboard_data } from "../../assets/assets";
 import BlogTableItem from "../../components/admin/BlogTableItem";
 import { useAppContext } from "../../context/AppContext";
+import axios from "../../context/axiosInstance";
 import toast from "react-hot-toast";
 
 const Dashboard = () => {
-  const { axios } = useAppContext();
+  // const { axios } = useAppContext();
   // console.log(blogs);
   const [dashboardData, setDashboardData] = useState({
     blogs: 0,
@@ -17,10 +18,13 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const res = await axios.get("/api/dashboard");
+      const res = await axios.get("/api/dashboard", {
+        withCredentials: true,
+      });
       // console.log(res);
       // console.log(typeof res.data);
-      const data = typeof res.data === "string" ? JSON.parse(res.data) : res.data;
+      const data =
+        typeof res.data === "string" ? JSON.parse(res.data) : res.data;
       // console.log("Parsed Response:", data);
 
       setDashboardData({
@@ -30,12 +34,12 @@ const Dashboard = () => {
         recentBlogs: data.recentBlogs || [],
       });
     } catch (error) {
-      // console.error("Failed to fetch dashboard data", error);
-      toast.error(error)
+      toast.error("Failed to fetch dashboard data", error);
+      // console.error(error.response?.data?.message || error.message);
     }
   };
 
-  console.log(dashboardData);
+  // console.log(dashboardData);
 
   useEffect(() => {
     fetchDashboardData();
