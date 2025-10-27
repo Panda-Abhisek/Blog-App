@@ -26,10 +26,12 @@ import com.panda.blogapp.security.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 	
 	private final UserService userService;
@@ -56,7 +58,7 @@ public class AuthController {
 //	POST /api/auth/login
 	@PostMapping("/login")
 	public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequestDto dto) {
-	    System.out.println("Entered login endpoint in auth controller - Username + Password - " 
+	    log.debug("Entered login endpoint in auth controller - Username + Password - " 
 	        + dto.getUsername() + " - " + dto.getPassword());
 
 	    UsernamePasswordAuthenticationToken authToken =
@@ -68,7 +70,7 @@ public class AuthController {
 
 	        // Generate JWT
 	        String jwt = jwtUtil.generateTokenFromUsername(principal);
-	        System.out.println("Generated Jwt: " + jwt);
+//	        System.out.println("Generated Jwt: " + jwt);
 
 	        // Create HttpOnly cookie
 	        ResponseCookie jwtCookie = ResponseCookie.from("jwt", jwt)
@@ -79,13 +81,13 @@ public class AuthController {
 	                .maxAge(24 * 60 * 60) // 1 day
 	                .build();
 
-	        System.out.println("jwtCookie: " + jwtCookie);
+//	        System.out.println("jwtCookie: " + jwtCookie);
 	        // Fetch user details (minus password)
 	        User user = userRepository.findByUsername(principal.getUsername())
 	                .orElseThrow(() -> new RuntimeException("User not found"));
 
 	        user.setPassword(null); // never send this back
-	        System.out.println("User: " + user);
+//	        System.out.println("User: " + user);
 
 	        return ResponseEntity.ok()
 	                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
@@ -98,7 +100,7 @@ public class AuthController {
 	@GetMapping("/me")
 	public ResponseEntity<?> getCurrentUser(HttpServletRequest request) {
 	    String username = jwtUtil.getUsernameFromRequest(request);
-	    System.out.println("Username from request : " + username);
+//	    System.out.println("Username from request : " + username);
 	    if (username == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 	    User user = userRepository.findByUsername(username)
 	        .orElseThrow(() -> new UsernameNotFoundException("User not found"));

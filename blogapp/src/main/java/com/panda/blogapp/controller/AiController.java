@@ -21,12 +21,17 @@ public class AiController {
 
         // Build the prompt for Gemini
         String prompt = String.format("""
-                Write a complete blog post titled "%s" with subtitle "%s".
-                The blog should have:
-                - A short engaging introduction
-                - 2–3 well-structured body sections with <h2> and <p> tags
-                - A clear and thoughtful conclusion
-                The response must be valid HTML suitable for a rich-text editor.
+                Write a blog post titled "%s" with subtitle "%s".
+
+                Requirements:
+                - The output MUST be valid HTML with <h1>, <h2>, and <p> tags.
+                - DO NOT include <html>, <head>, <body>, or <title> tags.
+                - DO NOT use markdown or plain text.
+                - Keep formatting clean and structured for direct insertion into a rich text editor.
+                - Include:
+                  1. An engaging introduction
+                  2. 2–3 well-structured sections with <h2> headings
+                  3. A short conclusion
                 """, title, subTitle);
 
         try {

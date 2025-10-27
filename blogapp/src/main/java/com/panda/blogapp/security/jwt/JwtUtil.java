@@ -40,7 +40,7 @@ public class JwtUtil {
         if (request.getCookies() != null) {
             for (Cookie cookie : request.getCookies()) {
                 if ("jwt".equals(cookie.getName())) {
-                	System.out.println("jwt from cookies " + cookie.getValue());
+//                	System.out.println("jwt from cookies " + cookie.getValue());
                     return cookie.getValue();
                 }
             }
@@ -77,7 +77,7 @@ public class JwtUtil {
                     String token = cookie.getValue();
                     return getUserNameFromJwtToken(token);
                 } catch (Exception e) {
-                    System.out.println("Invalid JWT in cookie: " + e.getMessage());
+                    logger.debug("Invalid JWT in cookie: " + e.getMessage());
                     return null;
                 }
             }
@@ -100,12 +100,12 @@ public class JwtUtil {
 
     public boolean validateJwtToken(String authToken) {
         try {
-            System.out.println("Validate");
+//            System.out.println("Validate");
             Jwts.parser()
                     .verifyWith((SecretKey) key())
                     .build()
                     .parseSignedClaims(authToken);
-            System.out.println("Validated!!!");
+//            System.out.println("Validated!!!");
             return true;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());

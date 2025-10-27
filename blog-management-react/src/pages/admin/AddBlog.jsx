@@ -16,6 +16,8 @@ const AddBlog = () => {
   const [subTitle, setSubTitle] = useState("");
   const [category, setCategory] = useState("");
   const [published, setPublished] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [generating, setGenerating] = useState(false);
 
   const fileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -48,9 +50,11 @@ const AddBlog = () => {
     };
     // console.log(obj);
     try {
+      setAdding(true);
       const res = await axios.post(`/api/blogs`, obj);
       // console.log("Blog added:", res.data);
       toast.success("Blog Added");
+      setAdding(false);
 
       // Reset all fields after success
       setImage(false);
@@ -60,6 +64,7 @@ const AddBlog = () => {
       setPublished(false);
       quillRef.current.root.innerHTML = "";
     } catch (err) {
+      setAdding(false);
       // console.error("Error:", err);
       toast.error("Error: ", err);
     }
@@ -73,21 +78,34 @@ const AddBlog = () => {
 
     try {
       toast.loading("Generating content...");
+      setGenerating(true);
       const res = await axios.post("/api/ai/generate-blog", {
         title,
         subTitle,
       });
-      const content = res.data.content;
+      let content = res.data.content || "";
       // console.log(content);
-      
+
+      // Clean up extra blank lines, spaces, and useless tags
+      content = content
+        .replace(/^```html\s*/i, "") // remove starting ```html
+        .replace(/```$/i, "") // remove ending ```
+        .trim()
+        .replace(/<\/?(html|body|head|meta|title|style)[^>]*>/gi, "")
+        .replace(/\n{2,}/g, "\n")
+        .replace(/<p>\s*<\/p>/gi, "")
+        .replace(/(<br\s*\/?>\s*){2,}/gi, "<br/>")
+        .replace(/>\s+</g, "><");
 
       // Insert generated content into Quill editor
       const quill = quillRef.current;
       quill.root.innerHTML = content;
 
       toast.dismiss();
+      setGenerating(false);
       toast.success("Content generated successfully!");
     } catch (err) {
+      setGenerating(false)
       toast.dismiss();
       toast.error("Failed to generate content!");
       console.error(err);
@@ -149,6 +167,7 @@ const AddBlog = () => {
             className="absolute bottom-1 right-2 ml-2 text-xs text-white bg-black/70 px-4 py-1.5 rounded hover:underline cursor-pointer"
             type="button"
             onClick={generateContent}
+            disabled={generating}
           >
             Generate with AI
           </button>
@@ -183,9 +202,10 @@ const AddBlog = () => {
 
         <button
           type="submit"
+          disabled={adding}
           className="mt-8 w-40 h-10 bg-primary text-white rounded cursor-pointer text-sm"
         >
-          Add Blog
+          {adding ? "Adding..." : "Add Blog"}
         </button>
       </div>
     </form>

@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.panda.blogapp.dto.BlogDto;
 import com.panda.blogapp.dto.CreateBlogRequest;
-import com.panda.blogapp.entity.Blog;
-import com.panda.blogapp.entity.User;
 import com.panda.blogapp.repository.UserRepository;
 import com.panda.blogapp.service.BlogService;
 
@@ -52,7 +50,7 @@ public class BlogController {
     @PostMapping
     public ResponseEntity<BlogDto> createBlog(@Valid @RequestBody CreateBlogRequest request) {
     	String name = SecurityContextHolder.getContext().getAuthentication().getName();
-    	User user = userRepository.findByUsername(name)
+    	userRepository.findByUsername(name)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     	
         BlogDto blogDto = blogService.createBlog(request);
