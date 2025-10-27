@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const { axios, navigate, setUser } = useAppContext();
@@ -93,6 +94,12 @@ const Login = () => {
             >
               Login
             </button>
+            <div>
+              <p className="font-light mt-3">Not Registered?</p>
+              <Link to="/register" className="text-primary hover:underline">
+                Register Here
+              </Link>
+            </div>
           </form>
         </div>
       </div>
