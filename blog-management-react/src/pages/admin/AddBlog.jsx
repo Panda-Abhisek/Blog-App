@@ -65,7 +65,34 @@ const AddBlog = () => {
     }
   };
 
-  const generateContent = async () => {};
+  const generateContent = async () => {
+    if (!title.trim() && !subTitle.trim()) {
+      toast.error("Please enter title or subtitle first!");
+      return;
+    }
+
+    try {
+      toast.loading("Generating content...");
+      const res = await axios.post("/api/ai/generate-blog", {
+        title,
+        subTitle,
+      });
+      const content = res.data.content;
+      // console.log(content);
+      
+
+      // Insert generated content into Quill editor
+      const quill = quillRef.current;
+      quill.root.innerHTML = content;
+
+      toast.dismiss();
+      toast.success("Content generated successfully!");
+    } catch (err) {
+      toast.dismiss();
+      toast.error("Failed to generate content!");
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     // Initiate Quill only once

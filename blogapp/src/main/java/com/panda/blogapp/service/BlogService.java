@@ -27,4 +27,6 @@ public interface BlogService {
 
 	void deleteBlog(Long id);
 
+	List<BlogDto> searchBlogs(String query);
+
 }

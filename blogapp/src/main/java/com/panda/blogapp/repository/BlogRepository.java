@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.panda.blogapp.dto.BlogDto;
 import com.panda.blogapp.entity.Blog;
 import com.panda.blogapp.entity.User;
 
@@ -27,5 +28,7 @@ public interface BlogRepository extends JpaRepository<Blog, Long>{
 
 	@Query("SELECT b FROM Blog b JOIN FETCH b.user WHERE b.user = :user")
 	List<Blog> findByUserWithUserFetched(@Param("user") User user);
+
+	public List<Blog> findByTitleContainingIgnoreCaseOrDescriptionContaining(String title, String description);
 
 }

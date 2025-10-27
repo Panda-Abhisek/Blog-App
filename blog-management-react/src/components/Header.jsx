@@ -1,7 +1,22 @@
 import React from 'react'
 import { assets } from '../assets/assets'
+import { useAppContext } from '../context/AppContext'
+import toast from 'react-hot-toast';
 
 const Header = () => {
+  const { input, setInput, blogs, setBlogs, axios } = useAppContext();
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.get(`/api/blogs/search?query=${input}`);
+      setBlogs(data);
+    } catch (error) {
+      console.error("Search failed:", error);
+      toast.error("Search failed:", error);
+    }
+  };
+
   return (
     <div className='mx-8 sm:mx-16 xl:mx-24 relative'>
       <div className='text-center mt-20 mb-8'>
@@ -13,8 +28,8 @@ const Header = () => {
         <h1 className='text-3xl sm:text-6xl font-semibold sm:leading-16 text-gray-700'>Your own <span className='text-primary'>blogging</span>  <br /> platform.</h1>
         <p className='my-6 sm:my-8 max-w-2xl m-auto max-sm:text-xs text-gray-500'>This is your space to think out loud, to share what matters and to write without filters. Whether it's one word or a thousand, your story starts right here.</p>
 
-        <form className='flex justify-between max-w-lg max-sm:scale-75 mx-auto border border-gray-300 bg-white rounded overflow-hidden'>
-            <input className='w-full pl-4 outline-none' type="text" placeholder='Search for blogs' required/>
+        <form onSubmit={handleSearch} className='flex justify-between max-w-lg max-sm:scale-75 mx-auto border border-gray-300 bg-white rounded overflow-hidden'>
+            <input value={input} onChange={(e) => setInput(e.target.value)} className='w-full pl-4 outline-none' type="text" placeholder='Search for blogs' required/>
             <button className='bg-primary text-white px-8 py-2 m-1.5 rounded hover:scale-105 tranistion-all cursor-pointer' type="submit">Search</button>
         </form>
       </div>

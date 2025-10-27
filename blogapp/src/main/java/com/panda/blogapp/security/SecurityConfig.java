@@ -58,7 +58,7 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.csrf(csrf -> csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringRequestMatchers("/api/auth/**", "/api/dashboard/**", "/api/comments/**", "/api/blogs/**"));
+                .ignoringRequestMatchers("/api/auth/**", "/api/dashboard/**", "/api/comments/**", "/api/blogs/**", "/api/ai/**"));
 //        http.httpBasic(Customizer.withDefaults());
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

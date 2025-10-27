@@ -93,4 +93,11 @@ public class BlogServiceImpl implements BlogService {
 		blogRepository.delete(blog);
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<BlogDto> searchBlogs(String query) {
+		List<Blog> byTitleContainingIgnoreCaseOrContentContainingIgnoreCase = blogRepository.findByTitleContainingIgnoreCaseOrDescriptionContaining(query, query);
+		return mapper.toDtoList(byTitleContainingIgnoreCaseOrContentContainingIgnoreCase);
+	}
+
 }

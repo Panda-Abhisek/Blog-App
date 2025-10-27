@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.panda.blogapp.dto.BlogDto;
 import com.panda.blogapp.dto.CreateBlogRequest;
+import com.panda.blogapp.entity.Blog;
 import com.panda.blogapp.entity.User;
 import com.panda.blogapp.repository.UserRepository;
 import com.panda.blogapp.service.BlogService;
@@ -76,6 +78,11 @@ public class BlogController {
     public ResponseEntity<?> deleteBlog(@PathVariable Long id) {
         blogService.deleteBlog(id);
         return ResponseEntity.ok("Blog deleted successfully");
+    }
+    
+    @GetMapping("/search")
+    public List<BlogDto> searchBlogs(@RequestParam String query) {
+    	return blogService.searchBlogs(query);
     }
 
 
