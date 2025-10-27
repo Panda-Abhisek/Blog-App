@@ -169,7 +169,7 @@ const AddBlog = () => {
             onClick={generateContent}
             disabled={generating}
           >
-            Generate with AI
+            {generating ? "Generating content..." : "Generate with AI"}
           </button>
         </div>
 
