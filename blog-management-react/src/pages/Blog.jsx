@@ -21,6 +21,7 @@ const Blog = () => {
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
   const [blogId, setBlogId] = useState("");
+  const [notify, setNotify] = useState(false);
 
   const { blogs, user } = useAppContext();
 
@@ -53,15 +54,18 @@ const Blog = () => {
 
     if (user != null) {
       try {
+        setNotify(true);
         const res = await axios.post("/api/comments", obj, { withCredentials: true });
         console.log(res);
-        toast.success("Comment added successfully");
+        setNotify(false);
+        toast.success("Comment added successfully & Owner Notified");
 
         setName("");
         setContent("");
 
         await fetchComments();
       } catch (error) {
+        setNotify(false);
         // console.log(error);
         toast.error(error.message);
       }
@@ -150,9 +154,10 @@ const Blog = () => {
             ></textarea>
             <button
               type="submit"
+              disabled={notify}
               className="bg-primary text-white rounded p-2 px-8 hover:scale-102 transition-all cursor-pointer"
             >
-              Submit
+              {notify ? "Notifying Owner..." : "Submit"}
             </button>
           </form>
         </div>

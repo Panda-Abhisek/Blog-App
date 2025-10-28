@@ -25,6 +25,7 @@ import com.panda.blogapp.repository.BlogRepository;
 import com.panda.blogapp.repository.CommentRepository;
 import com.panda.blogapp.repository.UserRepository;
 import com.panda.blogapp.service.CommentService;
+import com.panda.blogapp.service.impl.EmailNotificationService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,7 @@ public class CommentController {
 	private final BlogRepository blogRepository;
 	private final CommentMapper mapper;
 	private final UserRepository userRepository;
+	private final EmailNotificationService emailNotificationService;
 
 	// Get all comments (could be admin or filtered by blog id in a real app)
 	@GetMapping
@@ -56,9 +58,9 @@ public class CommentController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<CommentDto> addComment(@Valid @RequestBody CreateCommentRequest request) {
-		System.out.println("Entered add Comment endpoint");
+//		System.out.println("Entered add Comment endpoint");
 		String user = SecurityContextHolder.getContext().getAuthentication().getName();
-		System.out.println("Username: " + user);
+//		System.out.println("Username: " + user);
 		userRepository.findByUsername(user).orElseThrow(() -> new RuntimeException("User not found"));
 		
 		Blog blog = blogRepository.findById(request.getBlogId())
@@ -71,6 +73,7 @@ public class CommentController {
 		commentRepository.save(comment);
 		
 		CommentDto newComment = mapper.toDto(comment);
+		emailNotificationService.notifyBlogAuthor(request);
 		return new ResponseEntity<>(newComment, HttpStatus.CREATED);
 	}
 
