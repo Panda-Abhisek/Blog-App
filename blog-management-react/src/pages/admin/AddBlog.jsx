@@ -91,9 +91,6 @@ const AddBlog = () => {
         .replace(/^```html\s*/i, "") // remove starting ```html
         .replace(/```$/i, "") // remove ending ```
         .trim()
-        .replace(/<\/?(html|body|head|meta|title|style)[^>]*>/gi, "")
-        .replace(/\n{2,}/g, "\n")
-        .replace(/<p>\s*<\/p>/gi, "")
         .replace(/(<br\s*\/?>\s*){2,}/gi, "<br/>")
         .replace(/>\s+</g, "><");
 
