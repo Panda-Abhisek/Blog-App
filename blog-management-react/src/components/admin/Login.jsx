@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import Divider from "@mui/material/Divider";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
   const { axios, navigate, setUser } = useAppContext();
@@ -64,7 +66,7 @@ const Login = () => {
           </div>
           <form
             onSubmit={handleSubmit}
-            className="mt-6 w-full sm:max-w-md text-gray-600"
+            className="w-full sm:max-w-md text-gray-600"
           >
             <div className="flex flex-col">
               <label>Name</label>
@@ -74,7 +76,7 @@ const Login = () => {
                 type="text"
                 required
                 placeholder="Your name"
-                className="border-b-2 border-gray-300 p-2 outline-none mb-6"
+                className="border-b-2 border-gray-300 p-2 outline-none mb-4"
               />
             </div>
             <div className="flex flex-col">
@@ -85,17 +87,31 @@ const Login = () => {
                 type="password"
                 required
                 placeholder="Enter your password"
-                className="border-b-2 border-gray-300 p-2 outline-none mb-6"
+                className="border-b-2 border-gray-300 p-2 outline-none mb-4"
               />
             </div>
             <button
-              className="w-full py-3 font-medium bg-primary text-white rounded cursor-pointer hover:bg-primary/90 transition-all"
+              className="w-full py-3 font-medium bg-primary text-white rounded-full cursor-pointer hover:bg-primary/90 transition-all mb-2"
               type="submit"
             >
               Login
             </button>
+            <Divider className="font-light">OR</Divider>
+            <div className="flex items-center justify-between gap-1 py-2 ">
+              <Link
+                to={`/oauth2/authorization/google`}
+                className="flex gap-1 items-center justify-center flex-1 border p-2 shadow-sm shadow-blue-200 rounded-full hover:bg-blue-300 transition-all duration-300"
+              >
+                <span>
+                  <FcGoogle className="text-2xl" />
+                </span>
+                <span className="font-medium sm:text-customText text-sm">
+                  Login with Google
+                </span>
+              </Link>
+            </div>
             <div>
-              <p className="font-light mt-3">Not Registered?</p>
+              <p className="font-light mt-2">Not Registered?</p>
               <Link to="/register" className="text-primary hover:underline">
                 Register Here
               </Link>
