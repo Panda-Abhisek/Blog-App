@@ -5,11 +5,16 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.*;
 
 @RestController
 @RequestMapping("/api/ai")
+@RequiredArgsConstructor
 public class AiController {
+	
+	private final RestTemplate restTemplate; 
 
     @Value("${gemini.api.key}")
     private String geminiApiKey;
@@ -47,7 +52,7 @@ public class AiController {
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
-            RestTemplate restTemplate = new RestTemplate();
+//            RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<Map> geminiResponse = restTemplate.postForEntity(endpoint, entity, Map.class);
 
             // Extract the generated text from the Gemini response

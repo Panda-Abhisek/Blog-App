@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import com.panda.blogapp.dto.CreateCommentRequest;
 import com.panda.blogapp.entity.Blog;
-import com.panda.blogapp.entity.Comment;
 import com.panda.blogapp.entity.User;
 import com.panda.blogapp.repository.BlogRepository;
 import com.panda.blogapp.repository.UserRepository;

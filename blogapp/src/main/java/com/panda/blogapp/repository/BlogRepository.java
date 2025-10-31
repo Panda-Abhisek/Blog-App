@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.panda.blogapp.dto.BlogDto;
 import com.panda.blogapp.entity.Blog;
 import com.panda.blogapp.entity.User;
 
