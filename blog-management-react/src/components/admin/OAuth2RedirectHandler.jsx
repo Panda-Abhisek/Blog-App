@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
+import Loader from "../Loader";
 
 const OAuth2RedirectHandler = () => {
   const navigate = useNavigate();
@@ -23,7 +25,11 @@ const OAuth2RedirectHandler = () => {
         const res = await axios.get("/api/auth/me", { withCredentials: true });
         // console.log(res.data);
         setUser(res.data);
-        navigate("/admin");
+        toast.success("Login Successful!");
+
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
       } catch (error) {
         setUser(null);
         navigate("/login");
@@ -33,7 +39,7 @@ const OAuth2RedirectHandler = () => {
     fetchUser();
   }, [setUser, navigate, location.search]);
 
-  return <div>Checking authentication...</div>;
+  return <Loader />;
 };
 
 export default OAuth2RedirectHandler;
