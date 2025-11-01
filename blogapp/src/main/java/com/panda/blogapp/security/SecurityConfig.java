@@ -3,6 +3,8 @@ package com.panda.blogapp.security;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +21,16 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.panda.blogapp.config.OAuth2LoginSuccessHandler;
 import com.panda.blogapp.security.jwt.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+	
+	@Autowired
+	@Lazy
+	OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Value("${frontend.url}")
     String frontendUrl;
@@ -51,14 +58,15 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http.authorizeHttpRequests((request) ->
-                request.requestMatchers("/api/public", "/api/auth/**", "/api/blogs/**", "/swagger-ui/**", "/v3/**")
+                request.requestMatchers("/api/public", "/api/auth/**", "/api/blogs/**", "/swagger-ui/**", "/v3/**", "/oauth2/**")
                         .permitAll()
                         .anyRequest().authenticated()
         );
+        http.oauth2Login(oauth2 -> oauth2.successHandler(oAuth2LoginSuccessHandler));
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.csrf(csrf -> csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .ignoringRequestMatchers("/api/auth/**", "/api/dashboard/**", "/api/comments/**", "/api/blogs/**", "/api/ai/**"));
+                .ignoringRequestMatchers("/api/auth/**", "/api/dashboard/**", "/api/comments/**", "/api/blogs/**", "/api/ai/**", "/oauth2/**"));
 //        http.httpBasic(Customizer.withDefaults());
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

@@ -1,5 +1,7 @@
 package com.panda.blogapp.security.services;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.panda.blogapp.entity.User;
@@ -17,6 +19,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User registerUser(@Valid User user) {
 		return userRepository.save(user);
+	}
+
+	@Override
+	public Optional<User> findByEmail(String email) {
+		return userRepository.findByEmail(email);
 	}
 	
 }

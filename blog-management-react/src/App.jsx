@@ -13,11 +13,12 @@ import 'quill/dist/quill.snow.css'
 import { Toaster } from 'react-hot-toast'
 import { useAppContext } from './context/AppContext'
 import Register from './components/admin/Register'
+import OAuth2RedirectHandler from './components/admin/OAuth2RedirectHandler'
 
 const App = () => {
 
   const {user} = useAppContext()
-  // console.log(user);
+  console.log(user);
 
   return (
     <div>
@@ -25,7 +26,9 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Home/>} />
         <Route path='/blogs/:id' element={<Blog/>} />
+        <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
         <Route path='/admin' element={user ? <Layout /> : <Login />}>
           <Route index element={<Dashboard/>}/>
           <Route path='addBlog' element={<AddBlog/>}/>

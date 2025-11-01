@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import Divider from "@mui/material/Divider";
 import { FcGoogle } from "react-icons/fc";
 
+const apiUrl = import.meta.env.VITE_BASE_URL;
+
 const Login = () => {
   const { axios, navigate, setUser } = useAppContext();
   const [username, setUsername] = useState("");
@@ -18,6 +20,10 @@ const Login = () => {
     } catch (error) {
       console.error("Failed to fetch CSRF token", error);
     }
+  };
+
+  const googleOAuth = () => {
+    window.location.href = `${apiUrl}/oauth2/authorization/google`;
   };
 
   const handleSubmit = async (e) => {
@@ -99,7 +105,7 @@ const Login = () => {
             <Divider className="font-light">OR</Divider>
             <div className="flex items-center justify-between gap-1 py-2 ">
               <Link
-                to={`/oauth2/authorization/google`}
+                onClick={googleOAuth}
                 className="flex gap-1 items-center justify-center flex-1 border p-2 shadow-sm shadow-blue-200 rounded-full hover:bg-blue-300 transition-all duration-300"
               >
                 <span>
