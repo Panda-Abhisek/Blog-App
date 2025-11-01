@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.panda.blogapp.dto.LoginRequestDto;
@@ -124,6 +125,29 @@ public class AuthController {
 	@GetMapping("/csrf-token")
 	public CsrfToken getCsrfToken(CsrfToken token) {
 	    return token; // Spring will automatically add XSRF-TOKEN cookie
+	}
+	
+	@PostMapping("/public/forgot-password")
+	public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+		try {
+			System.out.println("Entered forgotpassword");
+			userService.generatePasswordResetToken(email);
+			return ResponseEntity.ok("Password Reset Email Sent");
+		} catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Sending Password Reset Email");
+		}
+	}
+	
+	@PostMapping("/public/reset-password")
+	public ResponseEntity<?> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
+		try {
+			System.out.println("Entered resetPassword");
+			userService.resetPassword(token, newPassword);
+			System.out.println("Exited resetPassword");
+			return ResponseEntity.ok("Password Reset Successful");
+		} catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
 	}
 	
 }

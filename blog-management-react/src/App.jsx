@@ -14,6 +14,8 @@ import { Toaster } from 'react-hot-toast'
 import { useAppContext } from './context/AppContext'
 import Register from './components/admin/Register'
 import OAuth2RedirectHandler from './components/admin/OAuth2RedirectHandler'
+import ForgotPassword from './components/admin/ForgotPassword'
+import ResetPassword from './components/admin/ResetPassword'
 
 const App = () => {
 
@@ -29,12 +31,15 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        
         <Route path='/admin' element={user ? <Layout /> : <Login />}>
           <Route index element={<Dashboard/>}/>
           <Route path='addBlog' element={<AddBlog/>}/>
           <Route path='listBlog' element={<ListBlog/>}/>
           <Route path='comments' element={<Comments/>}/>
         </Route>
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </div>
   )

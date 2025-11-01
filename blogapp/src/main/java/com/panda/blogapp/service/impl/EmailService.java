@@ -18,4 +18,12 @@ public class EmailService {
         message.setText(body);
         mailSender.send(message);
     }
+
+	public void sendPasswordResetMail(String to, String resetUrl) {
+		SimpleMailMessage msg = new SimpleMailMessage();
+		msg.setTo(to);
+		msg.setSubject("Password Reset Request");
+		msg.setText("Click this link: " + resetUrl);
+		mailSender.send(msg);
+	}
 }

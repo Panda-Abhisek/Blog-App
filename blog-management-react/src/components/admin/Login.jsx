@@ -95,9 +95,17 @@ const Login = () => {
                 type="password"
                 required
                 placeholder="Enter your password"
-                className="border-b-2 border-gray-300 p-2 outline-none mb-4"
+                className="border-b-2 border-gray-300 p-2 outline-none mb-2"
               />
             </div>
+            <p className=" text-sm text-slate-700 mb-4">
+              <Link
+                className=" underline hover:text-black"
+                to="/forgot-password"
+              >
+                Forgot Password?
+              </Link>
+            </p>
             <button
               className="w-full py-3 font-medium bg-primary text-white rounded-full cursor-pointer hover:bg-primary/90 transition-all mb-2"
               type="submit"
