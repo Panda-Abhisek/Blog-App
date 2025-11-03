@@ -131,8 +131,8 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
      // Create HttpOnly cookie for JWT
         ResponseCookie jwtCookie = ResponseCookie.from("jwt", jwtToken)
             .httpOnly(true)
-            .secure(false) // set true in production with https
-            .sameSite("Lax")
+            .secure(true) // set true in production with https
+            .sameSite("None")
             .path("/")
             .maxAge(24 * 60 * 60)  // 1 day lifetime
             .build();
