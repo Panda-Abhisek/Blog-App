@@ -65,6 +65,15 @@ const AddBlog = () => {
       quillRef.current.root.innerHTML = "";
     } catch (err) {
       setAdding(false);
+      if (
+        err.response &&
+        (err.response.status === 401 || err.response.status === 403)
+      ) {
+        window.location.href = `${
+          import.meta.env.VITE_BASE_URL
+        }/oauth2/authorization/google`;
+        return;
+      }
       // console.error("Error:", err);
       toast.error("Error: ", err);
     }
@@ -102,10 +111,19 @@ const AddBlog = () => {
       setGenerating(false);
       toast.success("Content generated successfully!");
     } catch (err) {
-      setGenerating(false)
+      setGenerating(false);
       toast.dismiss();
+      if (
+        err.response &&
+        (err.response.status === 401 || err.response.status === 403)
+      ) {
+        window.location.href = `${
+          import.meta.env.VITE_BASE_URL
+        }/oauth2/authorization/google`;
+        return;
+      }
       toast.error("Failed to generate content!");
-      console.error(err);
+      console.error(err.message);
     }
   };
 
