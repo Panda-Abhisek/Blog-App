@@ -30,7 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
@@ -131,7 +131,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
      // Create HttpOnly cookie for JWT
         ResponseCookie jwtCookie = ResponseCookie.from("jwt", jwtToken)
             .httpOnly(true)
-            .secure(true) // set true in production with https
+            .secure(false) // set true in production with https
             .sameSite("None")
             .path("/")
             .maxAge(24 * 60 * 60)  // 1 day lifetime

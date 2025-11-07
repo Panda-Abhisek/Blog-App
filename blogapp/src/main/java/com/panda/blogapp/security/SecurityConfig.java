@@ -28,9 +28,9 @@ import com.panda.blogapp.security.jwt.JwtFilter;
 @EnableWebSecurity
 public class SecurityConfig {
 	
-	@Autowired
-	@Lazy
-	OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+//	@Autowired
+//	@Lazy
+//	OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Value("${frontend.url}")
     String frontendUrl;
@@ -62,7 +62,7 @@ public class SecurityConfig {
                         .permitAll()
                         .anyRequest().authenticated()
         );
-        http.oauth2Login(oauth2 -> oauth2.successHandler(oAuth2LoginSuccessHandler));
+//        http.oauth2Login(oauth2 -> oauth2.successHandler(oAuth2LoginSuccessHandler));
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         http.csrf(csrf -> csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())

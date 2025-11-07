@@ -113,7 +113,7 @@ const Login = () => {
               Login
             </button>
             <Divider className="font-light">OR</Divider>
-            <div className="flex items-center justify-between gap-1 py-2 ">
+            {/* <div className="flex items-center justify-between gap-1 py-2 ">
               <Link
                 onClick={googleOAuth}
                 className="flex gap-1 items-center justify-center flex-1 border p-2 shadow-sm shadow-blue-200 rounded-full hover:bg-blue-300 transition-all duration-300"
@@ -125,7 +125,7 @@ const Login = () => {
                   Login with Google
                 </span>
               </Link>
-            </div>
+            </div> */}
             <div>
               <p className="font-light mt-2">Not Registered?</p>
               <Link to="/register" className="text-primary hover:underline">
