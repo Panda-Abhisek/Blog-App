@@ -20,7 +20,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build Docker image
-      run: docker build -t abhisekpanda/blog-backend:latest ./backend
+      run: docker build -t abhisekpanda/blog-backend:latest ./blogapp
 
     - name: Push Docker image
       run: docker push abhisekpanda/blog-backend:latest
