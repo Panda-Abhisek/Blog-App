@@ -47,9 +47,7 @@ const Login = () => {
         await fetchCsrfToken(); // <-- fetch CSRF cookie now
         // await fetchCurrentUser(); // optional: get logged-in user
         toast.success("Login successful!");
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+        navigate("/admin");
       } else {
         toast.error("Login Failed!");
       }
