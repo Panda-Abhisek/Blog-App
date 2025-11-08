@@ -2,4 +2,5 @@ Blog Manangement - QuickBlog
 
 FRONTEND
 
-BACKEND
+BACKEND: 
+Tech Stack - Java, Spring Boot
