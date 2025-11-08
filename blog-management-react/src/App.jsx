@@ -30,7 +30,7 @@ const App = () => {
         <Route path='/blogs/:id' element={<Blog/>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
+        {/* <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} /> */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
         
         <Route path='/admin' element={user ? <Layout /> : <Login />}>

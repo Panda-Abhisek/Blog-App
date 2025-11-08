@@ -112,7 +112,7 @@ const Login = () => {
             >
               Login
             </button>
-            <Divider className="font-light">OR</Divider>
+            {/* <Divider className="font-light">OR</Divider> */}
             {/* <div className="flex items-center justify-between gap-1 py-2 ">
               <Link
                 onClick={googleOAuth}
