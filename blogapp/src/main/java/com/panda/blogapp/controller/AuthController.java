@@ -77,7 +77,7 @@ public class AuthController {
 	        ResponseCookie jwtCookie = ResponseCookie.from("jwt", jwt)
 	                .httpOnly(true)
 	                .secure(true) // use true in production (HTTPS)
-	                .sameSite("Lax")
+	                .sameSite("None")
 	                .path("/")
 	                .maxAge(24 * 60 * 60) // 1 day
 	                .build();
