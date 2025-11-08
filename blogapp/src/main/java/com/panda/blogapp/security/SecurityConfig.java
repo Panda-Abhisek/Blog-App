@@ -24,10 +24,6 @@ import com.panda.blogapp.security.jwt.JwtFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	
-//	@Autowired
-//	@Lazy
-//	OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Value("${frontend.url}")
     String frontendUrl;
