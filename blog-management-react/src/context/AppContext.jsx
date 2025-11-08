@@ -17,8 +17,9 @@ export const AppProvider = ({ children }) => {
     try {
       const { data } = await axios.get("/api/auth/me", { withCredentials: true });
       setUser(data);
-    } catch {
+    } catch (error){
       setUser(null);
+      toast.error("There is no logged-in user - ", error.message)
     }
   };
 
