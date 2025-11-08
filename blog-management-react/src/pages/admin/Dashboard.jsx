@@ -34,16 +34,6 @@ const Dashboard = () => {
         recentBlogs: data.recentBlogs || [],
       });
     } catch (error) {
-      if (
-        error.response &&
-        (error.response.status === 401 || error.response.status === 403)
-      ) {
-        // User is not authenticated, redirect to OAuth login page
-        window.location.href = `${
-          import.meta.env.VITE_BASE_URL
-        }/oauth2/authorization/google`;
-        return;
-      }
       toast.error("Failed to fetch dashboard data", error);
       // console.error(error.response?.data?.message || error.message);
     }
