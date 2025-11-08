@@ -13,7 +13,6 @@ import 'quill/dist/quill.snow.css'
 import { Toaster } from 'react-hot-toast'
 import { useAppContext } from './context/AppContext'
 import Register from './components/admin/Register'
-import OAuth2RedirectHandler from './components/admin/OAuth2RedirectHandler'
 import ForgotPassword from './components/admin/ForgotPassword'
 import ResetPassword from './components/admin/ResetPassword'
 
@@ -30,7 +29,6 @@ const App = () => {
         <Route path='/blogs/:id' element={<Blog/>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        {/* <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} /> */}
         <Route path="/forgot-password" element={<ForgotPassword />} />
         
         <Route path='/admin' element={user ? <Layout /> : <Login />}>
