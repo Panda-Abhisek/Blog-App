@@ -3,8 +3,6 @@ package com.panda.blogapp.security;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hibernate.validator.internal.util.stereotypes.Lazy;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +19,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.panda.blogapp.config.OAuth2LoginSuccessHandler;
 import com.panda.blogapp.security.jwt.JwtFilter;
 
 @Configuration
