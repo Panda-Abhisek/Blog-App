@@ -12,6 +12,7 @@ const Login = () => {
   const { axios, navigate, setUser } = useAppContext();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const fetchCsrfToken = async () => {
     try {
@@ -30,6 +31,7 @@ const Login = () => {
     e.preventDefault();
     console.log(username, password);
     try {
+      setLoading(true)
       const { data } = await axios.post(
         "/api/auth/login",
         {
@@ -46,12 +48,14 @@ const Login = () => {
         // console.log(JSON.stringify(data));
         await fetchCsrfToken(); // <-- fetch CSRF cookie now
         // await fetchCurrentUser(); // optional: get logged-in user
+        setLoading(false);
         toast.success("Login successful!");
         navigate("/admin");
       } else {
         toast.error("Login Failed!");
       }
     } catch (error) {
+      setLoading(false);
       toast.error(error.message);
     }
   };
@@ -108,7 +112,7 @@ const Login = () => {
               className="w-full py-3 font-medium bg-primary text-white rounded-full cursor-pointer hover:bg-primary/90 transition-all mb-2"
               type="submit"
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </button>
             {/* <Divider className="font-light">OR</Divider> */}
             {/* <div className="flex items-center justify-between gap-1 py-2 ">

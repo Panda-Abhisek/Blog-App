@@ -8,18 +8,22 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true)
       const { data } = await axios.post(
         "/api/auth/register",
         { username, email, password },
         { withCredentials: true }
       );
       toast.success("Registration successful!");
+      setLoading(false)
       navigate("/admin");
     } catch (error) {
+      setLoading(false)
       toast.error(error.response?.data?.message || "Registration failed");
     }
   };
@@ -71,7 +75,7 @@ const Register = () => {
             type="submit"
             className="w-full py-3 bg-primary text-white rounded hover:bg-primary/90 transition-all"
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
           <div>
             <p className="font-light mt-3">Already have an account?</p>
