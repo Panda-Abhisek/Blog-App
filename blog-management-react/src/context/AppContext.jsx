@@ -19,7 +19,7 @@ export const AppProvider = ({ children }) => {
       setUser(data);
     } catch (error){
       setUser(null);
-      toast.error("There is no logged-in user - ", error.message)
+      toast.error("You are NOT logged-in.", error.message)
     }
   };
 
