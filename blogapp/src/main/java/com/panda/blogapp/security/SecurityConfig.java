@@ -51,7 +51,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http.authorizeHttpRequests((request) ->
-                request.requestMatchers("/api/public", "/api/auth/**", "/api/blogs/**", "/swagger-ui/**", "/v3/**", "/oauth2/**")
+                request.requestMatchers("/api/public", "/actuator/**", "/api/auth/**", "/api/blogs/**", "/swagger-ui/**", "/v3/**", "/oauth2/**")
                         .permitAll()
                         .anyRequest().authenticated()
         );
