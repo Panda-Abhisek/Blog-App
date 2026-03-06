@@ -22,7 +22,7 @@ const Navbar = () => {
           href='https://github.com/Panda-Abhisek/Blog-App' 
           target="_blank" 
           rel="noopener noreferrer"
-          className='flex items-center gap-2 rounded-full text-sm cursor-pointer bg-secondary text-white px-10 py-2.5 hover:scale-105 transition-all'
+          className='flex items-center gap-2 rounded-full text-sm cursor-pointer bg-gray-500 text-white px-10 py-2.5 hover:scale-105 transition-all'
         >
           github
           <img src={assets.arrow} className='w-3' alt="arrow" />
